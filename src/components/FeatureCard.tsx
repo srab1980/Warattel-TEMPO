@@ -39,12 +39,12 @@ const defaultFeatures = [
   },
 ];
 
-function FeatureCard({
+const FeatureCard = ({
   title = "Feature Title",
   description = "This is a description of the feature that highlights its benefits and value to users.",
   icon: Icon = Lightbulb,
   className,
-}: FeatureCardProps) {
+}: FeatureCardProps) => {
   return (
     <Card className={cn("bg-white transition-all hover:shadow-lg", className)}>
       <CardHeader className="space-y-2">
@@ -64,8 +64,7 @@ function FeatureCard({
       </CardContent>
     </Card>
   );
-}
+};
 
-FeatureCard.defaultFeatures = defaultFeatures;
-
+export { defaultFeatures };
 export default FeatureCard;

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   Users,
@@ -20,6 +21,8 @@ import {
   GanttChartSquare,
   BookCheck,
   ScrollText,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -41,32 +44,49 @@ interface SidebarProps {
 }
 
 const defaultNavItems: NavItem[] = [
-  { icon: Home, label: "تعليم القرآن", href: "/" },
-  { icon: ClipboardList, label: "التسجيلات", href: "/registrations" },
+  { icon: Home, label: "الرئيسية", href: "/" },
+  { icon: Users, label: "إدارة الطلاب", href: "/students" },
+  { icon: ClipboardList, label: "إدارة المعلمين", href: "/teachers" },
+  { icon: UsersRound, label: "أولياء الأمور", href: "/parents" },
   { icon: CalendarCheck, label: "الحضور", href: "/attendance" },
   { icon: School, label: "الدرجات", href: "/grades" },
-  { icon: UsersRound, label: "أولياء الأمور", href: "/parents" },
   { icon: Wallet, label: "الرسوم", href: "/fees" },
-  { icon: CalendarDays, label: "الفعاليات", href: "/events" },
+  { icon: CalendarDays, label: "الدورات والفعاليات", href: "/events" },
   { icon: Library, label: "المكتبة", href: "/library" },
   { icon: FileBarChart, label: "التقارير", href: "/reports" },
-  { icon: LayoutDashboard, label: "لوحة التحكم", href: "/dashboard" },
-  { icon: UserCircle, label: "الملف الشخصي", href: "/profile" },
+  { icon: LayoutDashboard, label: "نظام التحفيز", href: "/gamification" },
   { icon: Calendar, label: "التقويم", href: "/calendar" },
   { icon: ScrollText, label: "الاختبارات", href: "/exams" },
   { icon: GanttChartSquare, label: "تخطيط", href: "/planning" },
   { icon: BookCheck, label: "المنهاج", href: "/curriculum" },
+  { icon: UserCircle, label: "الملف الشخصي", href: "/profile" },
   { icon: Settings, label: "الإعدادات", href: "/settings" },
 ];
 
 const Sidebar = ({ items = defaultNavItems, className }: SidebarProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div
       className={cn(
-        "flex h-full w-[280px] flex-col bg-[#1e2f4d] p-4",
+        "flex h-full flex-col bg-[#1e2f4d] p-4 transition-all duration-300",
+        isCollapsed ? "w-[80px]" : "w-[280px]",
         className,
       )}
+      dir="rtl"
     >
+      <Button
+        variant="ghost"
+        size="icon"
+        className="self-start mb-2 text-white hover:bg-white/10"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        {isCollapsed ? (
+          <ChevronLeft className="h-5 w-5" />
+        ) : (
+          <ChevronRight className="h-5 w-5" />
+        )}
+      </Button>
       <nav className="flex-1 space-y-1">
         <TooltipProvider>
           {items.map((item, index) => {
@@ -74,13 +94,29 @@ const Sidebar = ({ items = defaultNavItems, className }: SidebarProps) => {
             return (
               <Tooltip key={index}>
                 <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full flex-row-reverse text-white hover:bg-white/10"
-                  >
-                    {item.label}
-                    <Icon className="ml-3 h-5 w-5" />
-                  </Button>
+                  <Link to={item.href}>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        "w-full flex items-center text-white hover:bg-white/10",
+                        isCollapsed
+                          ? "justify-center px-2"
+                          : "justify-start px-4",
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "h-5 w-5 flex-shrink-0",
+                          isCollapsed ? "" : "ml-3",
+                        )}
+                      />
+                      {!isCollapsed && (
+                        <span className="flex-grow text-right">
+                          {item.label}
+                        </span>
+                      )}
+                    </Button>
+                  </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">
                   <p>{item.label}</p>

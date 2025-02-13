@@ -1,5 +1,6 @@
 import React from "react";
 import FeatureCard from "./FeatureCard";
+import { defaultFeatures } from "./FeatureCard";
 
 interface FeatureGridProps {
   features?: Array<{
@@ -9,9 +10,7 @@ interface FeatureGridProps {
   }>;
 }
 
-const FeatureGrid = ({
-  features = FeatureCard.defaultFeatures,
-}: FeatureGridProps) => {
+const FeatureGrid = ({ features = defaultFeatures }: FeatureGridProps) => {
   return (
     <div className="bg-gray-50 p-8">
       <div className="mx-auto max-w-7xl">
